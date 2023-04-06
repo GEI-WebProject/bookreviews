@@ -130,3 +130,6 @@ dmypy.json
 
 # docker compose
 docker-compose.debug.yml
+
+# VS Code
+.vscode/
