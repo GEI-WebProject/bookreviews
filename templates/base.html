@@ -19,6 +19,8 @@
                 <div class="nav-right">
                     {% if user.is_authenticated %}
                         Welcome, {{ user.username }}!
+                        <a href="{% url 'logout' %}">Log out</a>
+
                     {% else %}
                         You're not logged in.
                         <a href="{% url 'login' %}">Log In</a>
