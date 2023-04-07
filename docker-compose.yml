@@ -9,7 +9,8 @@ services:
       dockerfile: ./django/Dockerfile
     command: sh -c 'python3 manage.py migrate --no-input && python manage.py collectstatic --no-input && gunicorn --bind 0.0.0.0:8000 project_config.wsgi'
     depends_on:
-      - pgdb
+      pgdb:
+        condition: service_healthy
     volumes:
       - static_files:/app/static/
     expose:
@@ -25,6 +26,13 @@ services:
       dockerfile: ./postgres/Dockerfile
     env_file:
       - ./postgres/.env.dev
+    volumes:
+       - ./postgres/db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   
   nginx:
     image: nginx 
